@@ -1,11 +1,8 @@
 import { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Article, Feed } from "../../types";
+import { Article } from "../../types";
 import { fetchFeedArticles } from "../../utils/rss";
-
-type ArticleListView = {
-  feeds: Feed[];
-};
+import { storage } from "../../utils/storage";
 
 const sortArticlesByDate = (articles: Article[]) =>
   articles.sort((a, b) => {
@@ -16,14 +13,15 @@ const sortArticlesByDate = (articles: Article[]) =>
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
-const ArticleListView = ({ feeds }: ArticleListView): ReactElement<ArticleListView> => {
+const ArticleListView = (): ReactElement => {
   const [articles, setArticles] = useState<Article[]>([]);
 
   const { id } = useParams<{ id: string }>();
 
-  const activeFeed = id ? feeds.find((feed) => feed.id === id) : null;
-
   const getArticles = async () => {
+    const feeds = storage.getFeeds()
+    const activeFeed = id ? feeds.find((feed) => feed.id === id) : null;
+
     const currentFeeds = activeFeed ? [activeFeed] : feeds;
 
     const allFetchedArticles = await Promise.all(
