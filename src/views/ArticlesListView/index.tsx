@@ -1,13 +1,40 @@
 import { ReactElement, useEffect, useState } from "react";
-import { Article } from "../../types";
+import { useParams } from "react-router";
+import { Article, Feed } from "../../types";
 import { fetchFeedArticles } from "../../utils/rss";
 
-const ArticleListView = (): ReactElement => {
+type ArticleListView = {
+  feeds: Feed[];
+};
+
+const sortArticlesByDate = (articles: Article[]) =>
+  articles.sort((a, b) => {
+    if (!b.date || !a.date) {
+      return 0;
+    }
+
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
+const ArticleListView = ({ feeds }: ArticleListView): ReactElement<ArticleListView> => {
   const [articles, setArticles] = useState<Article[]>([]);
 
+  const { id } = useParams<{ id: string }>();
+
+  const activeFeed = id ? feeds.find((feed) => feed.id === id) : null;
+
   const getArticles = async () => {
-    const feedArticles = await fetchFeedArticles("https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml");
-    setArticles(feedArticles);
+    const currentFeeds = activeFeed ? [activeFeed] : feeds;
+
+    const allFetchedArticles = await Promise.all(
+      currentFeeds.map(async (feed) => await fetchFeedArticles(feed.url)),
+    );
+
+    const flatArticles = allFetchedArticles.flat();
+
+    const sortedArticles = sortArticlesByDate(flatArticles);
+
+    setArticles(sortedArticles);
   };
 
   useEffect(() => {
@@ -17,7 +44,7 @@ const ArticleListView = (): ReactElement => {
   return (
     <div>
       {articles.map((article) => (
-        <p>{article.title}</p>
+        <p key={article.id}>{article.title}</p>
       ))}
     </div>
   );

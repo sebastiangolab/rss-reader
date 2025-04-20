@@ -5,3 +5,9 @@ export type Article = {
   date: string | null;
   content: string | null;
 };
+
+export type Feed = {
+  id: string,
+  name: string,
+  url: string,
+}

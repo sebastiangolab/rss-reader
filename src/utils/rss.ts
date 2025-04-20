@@ -8,8 +8,16 @@ declare global {
 
 const parser = new window.RSSParser();
 
-export async function fetchFeedArticles(url: string): Promise<Article[]> {
-  const feedData = await parser.parseURL(url);
+export const fetchFeedArticles = async (url: string): Promise<Article[]> => {
+  let feedData = null;
+
+  try {
+    feedData = await parser.parseURL(url);
+  } catch (error) {
+    console.error("Error while load rss: " + error);
+
+    return [];
+  }
 
   if (!feedData || !Array.isArray(feedData.items)) {
     return [];
@@ -24,4 +32,4 @@ export async function fetchFeedArticles(url: string): Promise<Article[]> {
   }));
 
   return feedArticlesData;
-}
+};
