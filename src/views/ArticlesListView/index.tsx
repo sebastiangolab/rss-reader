@@ -1,8 +1,11 @@
 import { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Article } from "../../types";
+import { Article, Feed } from "../../types";
 import { fetchFeedArticles } from "../../utils/rss";
-import { storage } from "../../utils/storage";
+
+type ArticleListViewProps = {
+  feeds: Feed[];
+};
 
 const sortArticlesByDate = (articles: Article[]) =>
   articles.sort((a, b) => {
@@ -13,13 +16,12 @@ const sortArticlesByDate = (articles: Article[]) =>
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
-const ArticleListView = (): ReactElement => {
+const ArticleListView = ({ feeds }: ArticleListViewProps): ReactElement<ArticleListViewProps> => {
   const [articles, setArticles] = useState<Article[]>([]);
 
   const { id } = useParams<{ id: string }>();
 
   const getArticles = async () => {
-    const feeds = storage.getFeeds()
     const activeFeed = id ? feeds.find((feed) => feed.id === id) : null;
 
     const currentFeeds = activeFeed ? [activeFeed] : feeds;
@@ -36,8 +38,14 @@ const ArticleListView = (): ReactElement => {
   };
 
   useEffect(() => {
+    if (feeds.length === 0) {
+      setArticles([]);
+
+      return;
+    }
+
     getArticles();
-  }, []);
+  }, [id, feeds]);
 
   return (
     <div>
