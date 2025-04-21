@@ -36,7 +36,7 @@ const FeedForm = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors, isSubmitSuccessful, isLoading },
     setError,
     reset,
   } = useForm<FeedFormInputs>();
@@ -123,7 +123,7 @@ const FeedForm = ({
         {isSubmitSuccessful && <p className="form-success">{successText}</p>}
 
         <div>
-          <input type="submit" value={submitText} className="form-submit" />
+          <input type="submit" value={isLoading ? "Loading..." : submitText} className="form-submit" disabled={isLoading} />
         </div>
       </form>
     </div>

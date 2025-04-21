@@ -23,6 +23,7 @@ const ArticleListView = ({
   feeds,
 }: ArticleListViewProps): ReactElement<ArticleListViewProps> | null => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [isLoadingArticles, setIsLoadingArticles] = useState<boolean>(false);
 
   const { filters, getFilteredArticles } = useArticlesFiltersContext();
 
@@ -52,9 +53,13 @@ const ArticleListView = ({
     const filteredArtiles = getFilteredArticles(sortedArticles);
 
     setArticles(filteredArtiles);
+
+    setIsLoadingArticles(false);
   };
 
   useEffect(() => {
+    setIsLoadingArticles(true);
+
     if (feeds.length === 0) {
       setArticles([]);
 
@@ -63,6 +68,14 @@ const ArticleListView = ({
 
     getArticles();
   }, [id, feeds, filters]);
+
+  if (isLoadingArticles) {
+    return (
+      <div className="articles">
+        <p>Loading articles...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="articles">

@@ -7,6 +7,7 @@ import { storage } from "../../utils/storage";
 
 const SingleArticleView = (): ReactElement => {
   const [articleData, setArticleData] = useState<Article | null>(null);
+  const [isLoadingArticle, setIsLoadingArticle] = useState<boolean>(false);
 
   const { feedId, articleSlug } = useParams<{ feedId: string; articleSlug: string }>();
 
@@ -29,14 +30,18 @@ const SingleArticleView = (): ReactElement => {
         ...currentArticle,
       });
     }
+
+    setIsLoadingArticle(false);
   };
 
   useEffect(() => {
+    setIsLoadingArticle(true);
     getArticle();
   }, []);
 
   return (
     <SingleArticleContent
+      isLoading={isLoadingArticle}
       title={articleData?.title || null}
       date={articleData?.date || null}
       content={articleData?.content || null}
