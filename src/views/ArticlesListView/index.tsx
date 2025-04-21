@@ -1,6 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ArticleItem from "../../components/ArticleItem";
+import { useArticlesFiltersContext } from "../../providers/ArticlesFiltersContextProvider";
 import { Article, Feed } from "../../types";
 import { fetchFeedArticles } from "../../utils/rss";
 import "./articlesListView.css";
@@ -22,6 +23,8 @@ const ArticleListView = ({
   feeds,
 }: ArticleListViewProps): ReactElement<ArticleListViewProps> | null => {
   const [articles, setArticles] = useState<Article[]>([]);
+
+  const { filters, getFilteredArticles } = useArticlesFiltersContext();
 
   const { id } = useParams<{ id: string }>();
 
@@ -46,7 +49,9 @@ const ArticleListView = ({
 
     const sortedArticles = sortArticlesByDate(flatArticles);
 
-    setArticles(sortedArticles);
+    const filteredArtiles = getFilteredArticles(sortedArticles);
+
+    setArticles(filteredArtiles);
   };
 
   useEffect(() => {
@@ -57,13 +62,14 @@ const ArticleListView = ({
     }
 
     getArticles();
-  }, [id, feeds]);
+  }, [id, feeds, filters]);
 
   return (
     <div className="articles">
       {articles.map((article) => (
         <ArticleItem
           key={article.id}
+          id={article.id}
           date={article.date}
           title={article.title}
           slug={article.slug}

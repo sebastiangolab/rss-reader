@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Feed } from "../../types";
 import { v4 as uuidv4 } from "uuid";
 import { validateFeedUrl } from "../../utils/rss";
-import "./feedForm.css";
 
 export enum FeedFormAction {
   ADD = "add",

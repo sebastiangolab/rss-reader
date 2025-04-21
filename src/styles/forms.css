@@ -1,7 +1,7 @@
 @reference "tailwindcss/theme.css";
 
 .form {
-  @apply mx-auto my-auto p-10 bg-white rounded-2xl shadow-md space-y-4 border-1 border-neutral-100 min-w-sm;
+  @apply mx-auto my-auto p-8 bg-white rounded-2xl shadow-md space-y-4 border-1 border-neutral-100 min-w-sm;
 }
 
 .form-title {
@@ -22,6 +22,14 @@
 
 .form-input.light-border {
   @apply border-neutral-300;
+}
+
+.form-checkbox-label {
+  @apply flex;
+}
+
+.form-checkbox-label > input {
+  @apply mt-[3px] mr-2;
 }
 
 .form-error {

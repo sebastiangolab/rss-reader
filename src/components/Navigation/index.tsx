@@ -1,9 +1,12 @@
-import { ReactElement } from "react";
-import { Link } from "react-router";
+import { ReactElement, useEffect } from "react";
+import { Link, useLocation } from "react-router";
 import { ReactComponent as EditIcon } from "../../icons/edit-icon.svg";
 import { ReactComponent as TrashIcon } from "../../icons/trash-icon.svg";
-import "./navigation.css";
+import { useArticlesFiltersContext } from "../../providers/ArticlesFiltersContextProvider";
 import { Feed } from "../../types";
+import ArticleSearchInput from "../ArticleSearchInput";
+import ArticlesFilters from "../ArticlesFilters";
+import "./navigation.css";
 
 type NavigationProps = {
   feeds: Feed[];
@@ -14,6 +17,20 @@ const Navigation = ({
   feeds,
   handleRemoveFeed,
 }: NavigationProps): ReactElement<NavigationProps> => {
+  const location = useLocation();
+  const {
+    filters: { searchValue },
+    setSearchValue,
+  } = useArticlesFiltersContext();
+
+  const isArticleListView = location.pathname === "/" || location.pathname.startsWith("/feed/");
+
+  useEffect(() => {
+    if (!isArticleListView && searchValue) {
+      setSearchValue("");
+    }
+  }, [isArticleListView]);
+
   return (
     <aside className="navigation-container">
       <h1 className="navigation-title">RSS Reader</h1>
@@ -22,7 +39,7 @@ const Navigation = ({
         + Add Feed
       </Link>
 
-      {feeds.length === 0 ? null : (
+      {feeds.length > 0 ? (
         <div>
           <h2 className="navigation-subtitle">Feeds List</h2>
 
@@ -50,7 +67,17 @@ const Navigation = ({
             ))}
           </div>
         </div>
-      )}
+      ) : null}
+
+      {feeds.length > 0 && isArticleListView ? (
+        <>
+          <h2 className="navigation-subtitle">Search article</h2>
+          <ArticleSearchInput />
+
+          <h2 className="navigation-subtitle">Filters</h2>
+          <ArticlesFilters />
+        </>
+      ) : null}
     </aside>
   );
 };
