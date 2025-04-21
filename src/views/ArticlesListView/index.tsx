@@ -63,6 +63,7 @@ const ArticleListView = ({
     if (feeds.length === 0) {
       setArticles([]);
 
+      setIsLoadingArticles(false);
       return;
     }
 
