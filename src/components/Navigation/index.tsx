@@ -18,7 +18,7 @@ const Navigation = ({
     <aside className="navigation-container">
       <h1 className="navigation-title">RSS Reader</h1>
 
-      <Link to="/add-feed" className="navigation-add-link" title="Dodaj nowy feed">
+      <Link to="/add-feed" className="navigation-add-link" title="Add new feed">
         + Add Feed
       </Link>
 
@@ -26,8 +26,8 @@ const Navigation = ({
         <div>
           <h2 className="navigation-subtitle">Feeds List</h2>
 
-          <Link to="/" className="navigation-feed-item" title="Wszystkie feedy">
-            Wszystkie
+          <Link to="/" className="navigation-feed-item" title="All feeds">
+            All feeds
           </Link>
 
           <div>

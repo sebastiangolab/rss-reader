@@ -33,3 +33,17 @@ export const fetchFeedArticles = async (url: string): Promise<Article[]> => {
 
   return feedArticlesData;
 };
+
+export const validateFeedUrl = async (url: string): Promise<boolean> => {
+  try {
+    const feedData = await parser.parseURL(url);
+
+    if (!feedData || !Array.isArray(feedData.items)) {
+      return false;
+    }
+
+    return true;
+  } catch {
+    return false;
+  }
+};

@@ -4,16 +4,17 @@ import Layout from "./components/Layout";
 import Navigation from "./components/Navigation";
 import { Feed } from "./types";
 import { storage } from "./utils/storage";
-import AddFeedView from "./views/AddFeedView";
 import ArticleListView from "./views/ArticlesListView";
 import SingleArticleView from "./views/SingleArticleView";
+import EditFeedFormView from "./views/EditFeedFormView";
+import AddFeedFormView from "./views/AddFeedFormView";
 
 const App = () => {
   const [feeds, setFeeds] = useState<Feed[]>([]);
 
   const addFeed = (newFeed: Feed): void => {
-    setFeeds(prevFeeds => [...prevFeeds, newFeed]);
-  }
+    setFeeds((prevFeeds) => [...prevFeeds, newFeed]);
+  };
 
   const removeFeed = (id: string): void => {
     const filteredFeeds = feeds.filter((feed) => feed.id !== id);
@@ -34,25 +35,16 @@ const App = () => {
   };
 
   useEffect(() => {
-    storage.saveFeeds(feeds);
-  }, [feeds]);
+    const storageFeeds = storage.getFeeds();
+
+    if (storageFeeds.length > 0) {
+      setFeeds(storage.getFeeds());
+    }
+  }, []);
 
   useEffect(() => {
-    setFeeds([
-      {
-        id: "testid1",
-        name: "Nazwa feeda 1",
-        url: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
-      },
-      {
-        id: "testid2",
-        name: "Nazwa feeda 2",
-        url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
-      },
-    ]);
-
-    // setFeeds(storage.getFeeds());
-  }, []);
+    storage.saveFeeds(feeds);
+  }, [feeds]);
 
   return (
     <Layout>
@@ -62,8 +54,11 @@ const App = () => {
         <Route path="/" element={<ArticleListView feeds={feeds} />} />
         <Route path="/feed/:id" element={<ArticleListView feeds={feeds} />} />
         <Route path="/article/:feedId/:articleId" element={<SingleArticleView />} />
-        <Route path="/add-feed" element={<AddFeedView />} />
-        <Route path="/edit-feed/:id" element={<AddFeedView />} />
+        <Route path="/add-feed" element={<AddFeedFormView handleAddFeed={addFeed} />} />
+        <Route
+          path="/edit-feed/:id"
+          element={<EditFeedFormView feeds={feeds} handleEditFeed={editFeed} />}
+        />
       </Routes>
     </Layout>
   );

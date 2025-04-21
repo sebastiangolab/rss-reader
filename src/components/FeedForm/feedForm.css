@@ -1,0 +1,33 @@
+@reference "tailwindcss/theme.css";
+
+.form {
+  @apply mx-auto my-auto p-10 bg-white rounded-2xl shadow-md space-y-4 border-1 border-neutral-100;
+}
+
+.form-title {
+  @apply text-xl;
+}
+
+.form-field {
+  @apply mt-4;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.form-input {
+  @apply w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-xs;
+}
+
+.form-error {
+  @apply text-sm text-red-600 mt-2;
+}
+
+.form-success {
+  @apply text-green-600 text-sm font-medium mt-2;
+}
+
+.form-submit {
+  @apply w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 mt-4 cursor-pointer;
+}
