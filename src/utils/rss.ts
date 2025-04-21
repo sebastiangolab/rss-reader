@@ -29,7 +29,7 @@ export const fetchFeedArticles = async (url: string): Promise<FetchArticle[]> =>
     title: articleData.title || null,
     slug: normalizeArticleSlug(articleData.title),
     date: articleData.pubDate || null,
-    content: articleData.content || null,
+    content: articleData["content:encoded"] || articleData.content || articleData.summary || null,
   }));
 
   return feedArticlesData;

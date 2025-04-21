@@ -1,4 +1,6 @@
 import { ReactElement } from "react";
+import { normalizeDate } from "../../helpers/normalizeDate";
+import { sanitizeHtml } from "../../helpers/sanitizeHtml";
 import { Article } from "../../types";
 import "./singleArticleContent.css";
 
@@ -12,6 +14,8 @@ const SingleArticleContent = ({
   title,
   content,
 }: SingleArticleContentProps): ReactElement<SingleArticleContentProps> | null => {
+  const cleanContent = content ? sanitizeHtml(content) : "";
+
   if (isLoading) {
     return (
       <div className="single-article">
@@ -22,9 +26,9 @@ const SingleArticleContent = ({
 
   return (
     <div className="single-article">
-      <p className="single-article-date">{date}</p>
+      <p className="single-article-date">{normalizeDate(date || "")}</p>
       <h1 className="single-article-title">{title}</h1>
-      <div className="article-content">{content}</div>
+      <div className="article-content" dangerouslySetInnerHTML={{ __html: cleanContent }} />
     </div>
   );
 };

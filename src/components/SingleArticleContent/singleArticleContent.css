@@ -2,7 +2,6 @@
 
 .single-article {
   @apply flex-1 border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow duration-200 m-8 overflow-y-auto;
-
 }
 
 .single-article-date {
@@ -51,4 +50,8 @@
 
 .article-content img {
   @apply max-w-full h-auto my-4 rounded-md;
+}
+
+.article-content svg {
+  @apply hidden;
 }
