@@ -1,0 +1,5 @@
+@reference "tailwindcss/theme.css";
+
+.not-found-text {
+    @apply p-4 text-xl;
+}

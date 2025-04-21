@@ -7,6 +7,7 @@ import EditFeedFormView from "./views/EditFeedFormView";
 import AddFeedFormView from "./views/AddFeedFormView";
 import { useFeeds } from "./hooks/useFeeds";
 import ArticlesFiltersContextProvider from "./providers/ArticlesFiltersContextProvider";
+import NotFoundView from "./views/NotFoundView";
 
 const App = () => {
   const { feeds, addFeed, removeFeed, editFeed } = useFeeds();
@@ -25,6 +26,7 @@ const App = () => {
             path="/edit-feed/:id"
             element={<EditFeedFormView feeds={feeds} handleEditFeed={editFeed} />}
           />
+          <Route path="*" element={<NotFoundView />} />
         </Routes>
       </Layout>
     </ArticlesFiltersContextProvider>
