@@ -29,9 +29,9 @@ const ArticleListView = ({
 
   const { id } = useParams<{ id: string }>();
 
-  const getArticles = async () => {
-    const activeFeed = id ? feeds.find((feed) => feed.id === id) : null;
+  const activeFeed = id ? feeds.find((feed) => feed.id === id) : null;
 
+  const getArticles = async () => {
     const currentFeeds = activeFeed ? [activeFeed] : feeds;
 
     const allFetchedFeedsArticles = await Promise.all(
@@ -69,24 +69,18 @@ const ArticleListView = ({
     getArticles();
   }, [id, feeds, filters]);
 
-  if (articles.length === 0) {
-    return (
-      <div className="articles">
-        <p>No articles</p>
-      </div>
-    );
+  if (isLoadingArticles) {
+    return <p className="articles-message">Loading articles...</p>;
   }
 
-  if (isLoadingArticles) {
-    return (
-      <div className="articles">
-        <p>Loading articles...</p>
-      </div>
-    );
+  if (articles.length === 0) {
+    return <p className="articles-message">No articles</p>;
   }
 
   return (
     <div className="articles">
+      <h1 className="articles-title">{activeFeed?.name ? `Articles: ${activeFeed.name}` : "All Articles"}</h1>
+
       {articles.map((article) => (
         <ArticleItem
           key={article.id}

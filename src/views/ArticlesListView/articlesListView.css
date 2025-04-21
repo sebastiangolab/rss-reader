@@ -3,3 +3,11 @@
 .articles {
     @apply flex-1 p-8 overflow-y-auto;
 }
+
+.articles-title {
+    @apply text-2xl mb-6;
+}
+
+.articles-message {
+    @apply p-8;
+}
