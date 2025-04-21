@@ -1,13 +1,15 @@
 import { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router";
+import ArticleItem from "../../components/ArticleItem";
 import { Article, Feed } from "../../types";
 import { fetchFeedArticles } from "../../utils/rss";
+import "./articlesListView.css";
 
 type ArticleListViewProps = {
   feeds: Feed[];
 };
 
-const sortArticlesByDate = (articles: Article[]) =>
+const sortArticlesByDate = (articles: Article[]): Article[] =>
   articles.sort((a, b) => {
     if (!b.date || !a.date) {
       return 0;
@@ -16,7 +18,9 @@ const sortArticlesByDate = (articles: Article[]) =>
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
-const ArticleListView = ({ feeds }: ArticleListViewProps): ReactElement<ArticleListViewProps> => {
+const ArticleListView = ({
+  feeds,
+}: ArticleListViewProps): ReactElement<ArticleListViewProps> | null => {
   const [articles, setArticles] = useState<Article[]>([]);
 
   const { id } = useParams<{ id: string }>();
@@ -26,11 +30,19 @@ const ArticleListView = ({ feeds }: ArticleListViewProps): ReactElement<ArticleL
 
     const currentFeeds = activeFeed ? [activeFeed] : feeds;
 
-    const allFetchedArticles = await Promise.all(
-      currentFeeds.map(async (feed) => await fetchFeedArticles(feed.url)),
+    const allFetchedFeedsArticles = await Promise.all(
+      currentFeeds.flatMap(async (feed) => ({
+        feedId: feed.id,
+        items: await fetchFeedArticles(feed.url),
+      })),
     );
 
-    const flatArticles = allFetchedArticles.flat();
+    const flatArticles: Article[] = allFetchedFeedsArticles.flatMap((article) => {
+      return article.items.map((item) => ({
+        feedId: article.feedId,
+        ...item,
+      }));
+    });
 
     const sortedArticles = sortArticlesByDate(flatArticles);
 
@@ -48,9 +60,15 @@ const ArticleListView = ({ feeds }: ArticleListViewProps): ReactElement<ArticleL
   }, [id, feeds]);
 
   return (
-    <div>
+    <div className="articles">
       {articles.map((article) => (
-        <p key={article.id}>{article.title}</p>
+        <ArticleItem
+          key={article.id}
+          date={article.date}
+          title={article.title}
+          slug={article.slug}
+          feedId={article.feedId}
+        />
       ))}
     </div>
   );

@@ -53,7 +53,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<ArticleListView feeds={feeds} />} />
         <Route path="/feed/:id" element={<ArticleListView feeds={feeds} />} />
-        <Route path="/article/:feedId/:articleId" element={<SingleArticleView />} />
+        <Route path="/article/:feedId/:articleSlug" element={<SingleArticleView />} />
         <Route path="/add-feed" element={<AddFeedFormView handleAddFeed={addFeed} />} />
         <Route
           path="/edit-feed/:id"

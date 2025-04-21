@@ -1,3 +1,9 @@
+@reference "tailwindcss/theme.css";
+
 .layout {
-    @apply flex h-screen overflow-hidden;
+  @apply flex h-screen overflow-hidden;
+}
+
+.layout aside {
+  @apply w-full max-w-3xs;
 }

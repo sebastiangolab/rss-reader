@@ -1,4 +1,5 @@
-import { Article } from "../types";
+import { normalizeArticleSlug } from "../helpers/normalizeArticleSlug";
+import { FetchArticle } from "../types";
 
 declare global {
   interface Window {
@@ -8,7 +9,7 @@ declare global {
 
 const parser = new window.RSSParser();
 
-export const fetchFeedArticles = async (url: string): Promise<Article[]> => {
+export const fetchFeedArticles = async (url: string): Promise<FetchArticle[]> => {
   let feedData = null;
 
   try {
@@ -23,10 +24,10 @@ export const fetchFeedArticles = async (url: string): Promise<Article[]> => {
     return [];
   }
 
-  const feedArticlesData = feedData.items.map((articleData: any) => ({
+  const feedArticlesData: FetchArticle[] = feedData.items.map((articleData: any) => ({
     id: articleData.guid || null,
     title: articleData.title || null,
-    url: articleData.link || null,
+    slug: normalizeArticleSlug(articleData.title),
     date: articleData.pubDate || null,
     content: articleData.contentSnippet || null,
   }));

@@ -1,0 +1,5 @@
+@reference "tailwindcss/theme.css";
+
+.articles {
+    @apply flex-1 p-8 overflow-y-auto;
+}
