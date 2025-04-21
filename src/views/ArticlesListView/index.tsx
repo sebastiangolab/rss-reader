@@ -70,9 +70,11 @@ const ArticleListView = ({
   }, [id, feeds, filters]);
 
   if (articles.length === 0) {
-    <div className="articles">
-      <p>No articles</p>
-    </div>;
+    return (
+      <div className="articles">
+        <p>No articles</p>
+      </div>
+    );
   }
 
   if (isLoadingArticles) {
