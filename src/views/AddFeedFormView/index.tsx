@@ -12,7 +12,7 @@ const AddFeedFormView = ({
   return (
     <FeedForm
       formAction={FeedFormAction.ADD}
-      formTitle="Add form"
+      formTitle="Add feed"
       submitText="Add"
       successText="Feed has been added successfully!"
       handleAddFeed={handleAddFeed}

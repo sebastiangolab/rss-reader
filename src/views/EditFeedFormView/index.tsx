@@ -25,7 +25,7 @@ const EditFeedFormView = ({
   return (
     <FeedForm
       formAction={FeedFormAction.EDIT}
-      formTitle={`Edit form "${activeFeed?.name}"`}
+      formTitle={`Edit feed "${activeFeed?.name}"`}
       submitText="Edit"
       successText="Feed has been edited successfully!"
       editedFeed={activeFeed}
